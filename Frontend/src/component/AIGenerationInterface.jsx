@@ -270,10 +270,10 @@ const AIGenerationInterface = () => {
             )}
           </div>
           <i className='mt-4 opacity-40'>VidBot may generated undesired output.</i>
-          <div style={{fontFamily: 'cursive', display: 'inline-flex', alignItems: 'center'}}>
+          <div style={{ display: 'inline-flex', alignItems: 'center'}}>
             Made with ❤️ by 
             <img src='decepticons.jpg' style={{borderRadius: '30px', marginLeft: '5px'}} height={'30'} width={'30'} />
-            Team Decepticons
+            <span style={{fontFamily:'cursive'}}>Team Decepticons</span>
           </div>
 
         </div>
