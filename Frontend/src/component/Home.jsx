@@ -57,7 +57,7 @@ const Home = () => {
 
 
             <p className="text-lg mb-4" style={{ fontFamily: 'Roboto Condensed, sans-serif', fontSize:'1.2em' }}>
-                EduVidBot is an AI-powered tool designed to generate educational videos based on user prompts. It creates engaging and interactive visual content to teach concepts in mathematics, physics, and other STEM subjects, making learning more effective and accessible.
+                VidBot is an AI-powered tool designed to generate educational videos based on user prompts. It creates engaging and interactive visual content to teach concepts in mathematics, physics, and other STEM subjects, making learning more effective and accessible.
             </p>
             <h2 className="text-3xl font-semibold mb-6" >How It Works 🤔</h2>
 
