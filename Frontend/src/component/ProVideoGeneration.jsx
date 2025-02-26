@@ -3,95 +3,24 @@ import { Send, Video, FileText, Download, Loader2, Clock, ChevronLeft, ChevronRi
 import FloatingSymbols from './Symbols';
 import { motion } from 'framer-motion';
 import Header from './Header';
-const VideoHistoryItem = ({ video, onSelect, isSelected }) => {
-  const videoRef = useRef(null);
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = true;
-      videoRef.current.play();
-    }
-  }, []);
-
-  return (
-    <div 
-    className={`p-3 rounded-lg cursor-pointer transition-all 
-      ${isSelected ? 'bg-gray-700 border-2 border-gray-500' : 'bg-gray-800 border border-gray-600'}
-    `}    
-      onClick={() => onSelect(video)}
-    >
-      <div className="aspect-video mb-2 overflow-hidden rounded-md">
-        <video
-          ref={videoRef}
-          src={video.url}
-          className="w-full h-full object-cover"
-          loop
-          muted
-          playsInline
-        />
-      </div>
-      <h4 className="font-medium text-gray-200 truncate">{video.prompt}</h4>
-      <p className="text-sm text-gray-400 mt-1">
-        <Clock className="inline-block w-4 h-4 mr-1" />
-        {new Date(video.timestamp).toLocaleDateString()}
-      </p>
-    </div>
-  );
-};
-
-const EmptyState = () => (
-  <div className="flex flex-col items-center justify-center p-8 text-center">
-    <Video className="w-12 h-12 text-gray-500 mb-4" />
-    <h3 className="text-gray-300 font-medium mb-2">No Videos Yet</h3>
-    <p className="text-gray-500 text-sm">
-      Generated videos will appear here
-    </p>
-  </div>
-);
-
-const AIGenerationInterface = () => {
+const ProVideoGeneration = () => {
   const [prompt, setPrompt] = useState('');
   const [script, setScript] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState(null);
   const [error, setError] = useState(null);
   const [videoId, setVideoId] = useState(null);
-  const [previousVideos, setPreviousVideos] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    fetchPreviousVideos();
-  }, []);
-
-  const fetchPreviousVideos = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`${API_URL}/videos`);
-      if (!response.ok) throw new Error('Error fetching videos');
-      const data = await response.json();
-      
-      if (Array.isArray(data)) {
-        setPreviousVideos(data);
-      } else {
-        console.error('Unexpected response format:', data);
-        setPreviousVideos([]);
-      }
-    } catch (err) {
-      console.error('Error fetching videos:', err);
-      setPreviousVideos([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGenerate = async () => {
     setIsGenerating(true);
     setError(null);
 
     try {        
-        const response = await fetch(`${API_URL}/generate-video`, {
+        const response = await fetch(`${API_URL}/generate-pro-video`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -106,9 +35,6 @@ const AIGenerationInterface = () => {
         const data = await response.json();
         setGeneratedContent(data.video_url);
         setVideoId(data.video_id);
-        
-        // Refresh the video list after generating new video
-        await fetchPreviousVideos();
 
     } catch (err) {
       setError(err.message);
@@ -138,59 +64,12 @@ const AIGenerationInterface = () => {
     }
   };
 
-  const handleVideoSelect = (video) => {
-    setGeneratedContent(video.url);
-    setVideoId(video._id);
-    setPrompt(video.prompt);
-  };
-
   return (
     <>
-    <Header/>
+    <Header/> 
     <div className="min-h-screen bg-black text-gray-300 relative overflow-hidden flex">
-      {/* Sidebar */}
-      <div
-        className={`fixed left-0 top-0 h-full bg-gray-900/95 backdrop-blur-xl border-r border-gray-800 transition-all duration-300 z-40 ${
-          isSidebarOpen ? 'w-72' : 'w-0'
-        } overflow-hidden`}
-      >
-        <div className="p-4 h-full overflow-y-auto">
-          <h2 className="text-xl font-semibold text-gray-200 mb-4">Previous Videos</h2>
-          {isLoading ? (
-            <div className="flex items-center justify-center p-4">
-              <Loader2 className="animate-spin h-6 w-6" />
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {previousVideos.length === 0 ? (
-                <EmptyState />
-              ) : (
-                previousVideos.map((video) => (
-                  <VideoHistoryItem
-                    key={video._id}
-                    video={video}
-                    onSelect={handleVideoSelect}
-                    isSelected={videoId === video._id}
-                  />
-                ))
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Sidebar Toggle Button */}
-      <button
-        className={`fixed top-1/2 transform -translate-y-1/2 bg-gray-800 p-2 rounded-lg z-50 transition-all duration-300 ${
-          isSidebarOpen ? 'left-72' : 'left-0'
-        }`}
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        {isSidebarOpen ? <ChevronLeft /> : <ChevronRight />}
-      </button>
-
       {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-72' : 'ml-0'}`}>
+      <div className={`flex-1 transition-all duration-300`}>
         <FloatingSymbols />
 
         {/* Rest of the existing content */}
@@ -203,8 +82,10 @@ const AIGenerationInterface = () => {
                 style={{ fontFamily: 'Playwrite IT Moderna, serif', display: 'inline-flex', alignItems: 'center' }} 
             >
                 VidBot 
-                <img height='50' width='50' src='image.png' style={{ verticalAlign: 'middle', marginLeft: '15px' }} />
+                <img height='50' width='50' src='image.png' style={{ verticalAlign: 'middle', marginLeft: '15px', marginRight:'15px' }} />
+                Pro
             </motion.h1>
+            <i>Limited prompts allowed. It may take longer to generate.</i>
           <div className="w-full max-w-2xl bg-gray-900/30 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-gray-800 mt-5">
 
             {/* Error Message */}
@@ -287,4 +168,4 @@ const AIGenerationInterface = () => {
   );
 };
 
-export default AIGenerationInterface;
+export default ProVideoGeneration;
