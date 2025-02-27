@@ -35,15 +35,15 @@ const Header = () => {
             transition={{ duration: 0.5 }}
         >
             <div className="max-w-6xl mx-auto flex items-center justify-between">
-                <Link to="/" className="text-3xl font-bold flex items-center">
+                <Link to="/" className="text-3xl font-bold flex items-center" style={{fontFamily: 'Playwrite IT Moderna, serif'}}>
+                    VidBot
                     <img
                         src="image.png"
                         alt="VidBot"
                         height="50"
                         width="50"
-                        style={{ verticalAlign: 'middle', marginRight: '15px' }}
+                        style={{ verticalAlign: 'middle', marginLeft: '15px' }}
                     />
-                    VidBot
                 </Link>
 
                 {/* Hamburger menu button */}
