@@ -59,7 +59,7 @@ const ProVideoGeneration = () => {
   const [error, setError] = useState(null);
   const [videoId, setVideoId] = useState(null);
   const [previousVideos, setPreviousVideos] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const API_URL = import.meta.env.VITE_API_URL;
 
